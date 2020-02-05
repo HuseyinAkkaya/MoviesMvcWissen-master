@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +11,7 @@ namespace _036_MoviesMvcWissen.Controllers
 {
     public class MoviesController : Controller
     {
-         MoviesContext db = new MoviesContext();
+        MoviesContext db = new MoviesContext();
         // GET: Movies
         public ViewResult Index()
         {
@@ -25,11 +26,30 @@ namespace _036_MoviesMvcWissen.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult Add()
-        //{
+        [HttpPost]
+        public ActionResult Add(string Name, string ProductionYear, string BoxOfficeReturn)
+        {
+            try
+            {
+                var entity = new Movie()
+                {
+                    Name = Name,
+                    ProductionYear = ProductionYear,
+                    BoxOfficeReturn = Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture)
+                };
+                db.Movies.Add(entity);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
-        //    return View();
-        //}
+
+
+            return RedirectToAction("Index");
+
+        }
     }
 }
