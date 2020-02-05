@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Add Movie";
+}
+
+<h2>@ViewBag.Title</h2>
+<form action="~/Movies/Add" method="get">
+    <div class="form-group">
+        <label for="tbName">Product Name</label>
+        <input type="text" class="form-control" id="tbName"/>
+    </div>
+    <div class="form-group">
+        <label for="tbProductionYear">Production Year</label>
+        <input type="text" class="form-control" id="tbProductionYear">
+    </div>
+    <div class="form-group">
+        <label for="tbBoxOfficeReturn">Production Year</label>
+        <input type="text" class="form-control" id="tbBoxOfficeReturn">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    &nbsp;
+    <button type="reset" class="btn btn-group">Clear</button>
+</form>
