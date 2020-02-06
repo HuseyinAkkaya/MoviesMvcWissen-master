@@ -1,14 +1,20 @@
-﻿@model List<_036_MoviesMvcWissen.Entities.Movie>
+﻿@using System.Web.UI.WebControls
+@model List<_036_MoviesMvcWissen.Entities.Movie>
 @{
     ViewBag.Title = "Movies";
 
 }
 
 <h2>@ViewBag.Title</h2>
+
 <a href="~/Movies/Add">Add Movie</a>
+<br/>
+<label class="text-success">@TempData["Info"]</label>
+
 <table class="table" style="background-color: gray">
  
     <tr>
+        <td><b> </b></td>
         <td><b>Name</b></td>
         <td><b>Production Year</b></td>
         <td><b>Box Office Return</b></td>
@@ -16,14 +22,17 @@
 
     @foreach (var f in Model)
     {
-        <tr>
-            <td>@f.Name</td>
-            <td>@f.ProductionYear</td>
-            <td>@f.BoxOfficeReturn</td>
-        </tr>
+    <tr>
+        <td>@Html.ActionLink("Edit", "Edit", new { id = f.Id },new { @class = "btn btn-danger" }) | @Html.ActionLink("Delete", "Delete", new { id = f.Id }, new { @class = "btn btn-danger" })</td>
+        <td>@f.Name</td>
+        <td>@f.ProductionYear</td>
+        <td>@f.BoxOfficeReturn</td>
+
+    </tr>
     }
     <tr>
-        <td colspan="3" style="text-align: right"><span><b>@Model.Count record found.</b></span></td>
+      @*  <td colspan="3" style="text-align: right"><span><b>@Model.Count record found.</b></span></td>*@
+        <td colspan="4" style="text-align: right"><span><b>@ViewData["count"] record found.</b></span></td>
     </tr>
 
 </table>

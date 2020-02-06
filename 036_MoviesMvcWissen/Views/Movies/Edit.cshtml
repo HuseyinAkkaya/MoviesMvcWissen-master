@@ -1,0 +1,72 @@
+﻿@using System.Web.UI.WebControls
+@model Movie
+@{
+    ViewBag.Title = "Edit";
+    var list = ViewBag.Dates as SelectList;
+
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@*@Html.BeginForm("Edit", "Movies", FormMethod.Post)
+    {
+
+
+    }
+    @{
+        Html.EndForm();
+    }*@
+
+@using (Html.BeginForm("Edit", "Movies", FormMethod.Post))
+{
+    @Html.Hidden("Id", Model.Id)
+    <div class="form-group">
+
+        @Html.Label("tbName", "Name")
+        @Html.TextBox("Name", Model.Name, new { @class = "form-control", placeholder = "Enter Movie Name", id = "tbName" })
+    </div>
+    <div class="form-group">
+
+        @Html.Label("tbYear", "Production Year")
+        @Html.DropDownList("ProductionYear", @list, new { @class = "form-control dropdown", id = "ddlProductionYear" })
+
+    </div>
+    <div class="form-group">
+        @Html.Label("tbBoxOffR", "Box Office Return")
+        @Html.TextBox("BoxOfficeReturn", Model.BoxOfficeReturn, new { @class = "form-control", id = "tbBoxOffR" })
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    @:&nbsp;
+    <button type="reset" class="btn btn-secondary">Clear</button>
+
+
+}
+
+
+
+@*<form action="~/Movies/Add" method="post">
+        <div class="form-group">
+            <label for="tbName">Product Name</label>
+            <input type="text" class="form-control" id="tbName" name="Name" value="@Model.Name" />
+        </div>
+        <div class="form-group">
+            <label for="ddlProductionYead">Production Year</label>
+            <select id="ddlProductionYear" name="ProductionYear" class="form-control dropdown">
+
+                @for (int i = DateTime.Now.Year; i >= 1980; i--)
+                {
+                    <option class="dropdown-item" value="@i">@i</option>
+                }
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="tbBoxOfficeReturn">Box Office Return</label>
+            <input type="text" class="form-control" id="tbBoxOfficeReturn" name="BoxOfficeReturn">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        &nbsp;
+        <button type="reset" class="btn btn-group">Clear</button>
+    </form>*@
