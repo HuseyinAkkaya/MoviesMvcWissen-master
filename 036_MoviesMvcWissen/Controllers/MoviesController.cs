@@ -110,7 +110,7 @@ namespace _036_MoviesMvcWissen.Controllers
                     Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture);
             db.Entry(newMovie).State = EntityState.Modified;
             db.SaveChanges();
-
+            TempData["Info"] = "Record successfully updated in database";
             return RedirectToAction("Index");
         }
 
@@ -131,10 +131,25 @@ namespace _036_MoviesMvcWissen.Controllers
         {
             if (!id.HasValue)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Id is required");
-            var entity = db.Movies.Find(id);
+            var entity = db.Movies.Find(id.Value);
             db.Movies.Remove(entity);
+            TempData["Info"] = "Record successfully deleted from database";
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Details(int? id)
+        {
+            if (!id.HasValue)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Id is required");
+            var model = db.Movies.Find(id.Value);
+            return View(model);
+        }
+
+        public ActionResult Welcome()
+        {
+            var result = "Welcome to Movies MVC";
+            return PartialView("_Welcome",result);
         }
     }
 }

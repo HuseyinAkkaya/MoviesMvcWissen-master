@@ -33,5 +33,24 @@ namespace _036_MoviesMvcWissen.Controllers
         }
         #endregion
 
+        #region Route Values
+
+        public string FromRoute(int id)
+        {
+            return id.ToString();
+        }
+
+        #endregion
+
+        #region QueryString
+
+
+
+
+        public string FromQueryString(string name, string surname)
+        {
+            return "Hi " + name + " " + surname;
+        }
+        #endregion
     }
 }

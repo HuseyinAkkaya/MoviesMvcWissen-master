@@ -4,9 +4,16 @@
 }
 
 <h2>@ViewBag.Title</h2>
+
+
+
+@Html.Partial("_Details",Model)
+
 @using (Html.BeginForm())
-{@Html.HiddenFor(e=>e.Id)
-    <div class="form-group">
+{@Html.HiddenFor(e => e.Id)
+
+
+@*<div class="form-group">
         <b> @Html.DisplayNameFor(e => e.Name):</b>
         @Html.DisplayFor(e=>e.Name)
     </div>
@@ -17,9 +24,10 @@
     <div class="form-group">
         <b>@Html.DisplayNameFor(e => e.ProductionYear):</b>
         @Html.DisplayFor(e=>e.ProductionYear)
-    </div>
-    <button type="submit" class="btn btn-success">Yes</button>
-    @Html.ActionLink("No","Index",null,new {@class="btn btn-danger"})
+    </div>*@
+
+<button type="submit" class="btn btn-success">Yes</button>
+@Html.ActionLink("No", "Index", null, new { @class = "btn btn-danger" })
 
 
 
