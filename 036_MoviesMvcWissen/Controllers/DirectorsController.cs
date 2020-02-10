@@ -58,6 +58,17 @@ namespace _036_MoviesMvcWissen.Controllers
                 Surname = Request.Form["Surname"],
                 Retired = Request.Form["Retired"] != "false"
             };
+            
+
+            if(string.IsNullOrWhiteSpace(director.Name))
+                ModelState.AddModelError("Name","Directory name is required");
+            if(string.IsNullOrWhiteSpace(director.Surname))
+                ModelState.AddModelError("Surname","Directory surname is required");
+            if (director.Name.Length>100)
+                ModelState.AddModelError("Name", "Directory name must be max 100 characters");
+             if (director.Surname.Length>100)
+                ModelState.AddModelError("Surname", "Directory surname must be max 100 characters");
+            
 
             if (ModelState.IsValid)
             {

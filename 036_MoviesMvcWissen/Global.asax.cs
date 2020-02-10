@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using FluentValidation;
+using FluentValidation.Mvc;
 
 namespace _036_MoviesMvcWissen
 {
@@ -13,6 +15,14 @@ namespace _036_MoviesMvcWissen
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            
+            ModelValidatorProviders.Providers.Clear();
+            ModelValidatorProviders.Providers.Add(new FluentValidationModelValidatorProvider()
+                {
+                    AddImplicitRequiredValidator = false
+                }
+            );
+
         }
     }
 }

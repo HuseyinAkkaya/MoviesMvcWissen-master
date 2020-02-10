@@ -1,6 +1,14 @@
 ﻿@model Movie
 @{
     ViewBag.Title = "Movie Details";
+    var movieDirectors = Model.MovieDirectors;
+    var directorFullNames = "";
+
+    foreach (var movieDirector in movieDirectors)
+    {
+        directorFullNames += movieDirector.Director.Name + " " + movieDirector.Director.Surname + ", ";
+    }
+    directorFullNames = directorFullNames.Trim(',',' ');
 }
 
 <h2>@ViewBag.Title</h2>
@@ -9,6 +17,7 @@
 
 
 @{
+    ViewBag.DirectorNames = directorFullNames;
     Html.RenderPartial("_Details", Model);
 }
 <br />

@@ -1,9 +1,10 @@
 ﻿@using System.Web.UI.WebControls
+@using _036_MoviesMvcWissen.Helpers
 @model Movie
 @{
     ViewBag.Title = "Edit";
     var list = ViewBag.Dates as SelectList;
-
+    var directors = ViewBag.Directors as MultiSelectList;
 
 }
 
@@ -37,9 +38,17 @@
         @Html.Label("tbBoxOffR", "Box Office Return")
         @Html.TextBox("BoxOfficeReturn", Model.BoxOfficeReturn, new { @class = "form-control", id = "tbBoxOffR" })
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+
+
+    <div class="form-group">
+        @Html.Label("ddlDirectors", "Directors:")
+        @Html.ListBox("directorIds", directors, new { @class = "form-control ", id = "ddlDirectors" })
+
+    </div>
+
+    @Html.Button("Save", new { @class = "btn btn-success", type = "submit" });
     @:&nbsp;
-    <button type="reset" class="btn btn-secondary">Clear</button>
+    @Html.Button("Clear", new { @class = "btn btn-secondary", type = "reset" });
 
 
 }

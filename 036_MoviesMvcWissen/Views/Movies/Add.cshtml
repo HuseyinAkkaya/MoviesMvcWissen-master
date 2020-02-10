@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Add Movie";
+    var directors = ViewData["directors"] as MultiSelectList;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -24,6 +25,19 @@
     <div class="form-group">
         <label for="tbBoxOfficeReturn">Box Office Return</label>
         <input type="text" class="form-control" id="tbBoxOfficeReturn" name="BoxOfficeReturn">
+    </div>
+    <div class="form-group">
+        <label for="ddlDirectors">Directors</label>
+        
+        <select id="ddlDirectors" name="Directors" class="form-control list-group" multiple >
+          
+            @foreach (var director in directors)
+            {
+                <option class="list-group-item" value="@director.Value">@director.Text</option>
+            }
+
+        </select>
+
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
     &nbsp;
