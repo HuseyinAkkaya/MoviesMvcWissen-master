@@ -11,7 +11,7 @@ namespace _036_MoviesMvcWissen.Validations.FluentValidations
     {
         public DirectorValidator()
         {
-            RuleFor(e => e.Name).NotEmpty().MaximumLength(50);
+            RuleFor(e => e.Name).NotEmpty().WithMessage("Boş girme").MaximumLength(50).WithMessage("Adı doğru giriniz");
             RuleFor(e => e.Surname).NotEmpty().Length(3, 50);
         }
     }
