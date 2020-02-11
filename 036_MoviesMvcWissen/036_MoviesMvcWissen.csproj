@@ -272,7 +272,9 @@
       <DependentUpon>202002050959369_MoviesV01.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\DirectorIndexViewModel.cs" />
     <Compile Include="Models\DirectorModel.cs" />
+    <Compile Include="Models\MoviesIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validations\FluentValidations\DirectorValidator.cs" />
   </ItemGroup>

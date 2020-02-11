@@ -17,17 +17,53 @@ namespace _036_MoviesMvcWissen.Controllers
     {
         MoviesContext db = new MoviesContext();
         // GET: Movies
-        public ViewResult Index()
+        public ViewResult Index(MoviesIndexViewModel moviesIndexViewModel)
         {
-            var model = GetList();
-            ViewData["count"] = model.Count;
-            return View(model);
+
+            if (moviesIndexViewModel == null || string.IsNullOrWhiteSpace(moviesIndexViewModel.YearId))
+            {
+                moviesIndexViewModel = new MoviesIndexViewModel();
+                moviesIndexViewModel.Movies = GetList();
+            }
+            else
+            {
+                moviesIndexViewModel.Movies = db.Movies.Where(e => e.ProductionYear.Equals(moviesIndexViewModel.YearId)).ToList();
+            }
+
+            var qr = db.Movies.AsQueryable();
+            qr = qr.Where(a => a.ProductionYear.Equals(""));
+
+
+            var years = new List<SelectListItem>();
+            //for (int i = DateTime.Now.Year; i >= 1950; i--)
+            //    years.Add(new SelectListItem()
+            //    {
+            //        Text = i.ToString(),
+            //        Value = i.ToString()
+            //    });
+
+            years = db.Movies.GroupBy(e => e.ProductionYear).Select(m => new SelectListItem()
+            {
+                Text = m.Key,
+                Value = m.Key
+            }).ToList();
+            years.Insert(0,new SelectListItem(){Text = @"--All--",Value = ""});
+
+            moviesIndexViewModel.Years = new SelectList(years, "Value", "Text", moviesIndexViewModel.YearId);
+
+
+
+            ViewData["count"] = moviesIndexViewModel.Movies.Count;
+            return View(moviesIndexViewModel);
         }
 
 
         public ActionResult GetMoviesFromSession()
         {
-            List<Movie> model = GetList(false);
+            var model = new MoviesIndexViewModel()
+            {
+                Movies = GetList(false)
+            };
             return View("Index", model);
         }
 
@@ -149,7 +185,7 @@ namespace _036_MoviesMvcWissen.Controllers
 
             var movieDirectors = db.MovieDirectors.Where(e => e.MovieId == movie.Id).ToList();
             movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
-           
+
             directorIds?.ForEach(e => newMovie.MovieDirectors.Add(new MovieDirector() { MovieId = newMovie.Id, DirectorId = e }));
 
             db.Entry(newMovie).State = EntityState.Modified;

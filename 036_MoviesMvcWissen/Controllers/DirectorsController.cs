@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using _036_MoviesMvcWissen.Contexts;
 using _036_MoviesMvcWissen.Entities;
+using _036_MoviesMvcWissen.Models;
 
 namespace _036_MoviesMvcWissen.Controllers
 {
@@ -19,7 +20,11 @@ namespace _036_MoviesMvcWissen.Controllers
         // GET: Directors
         public ActionResult Index()
         {
-            return View(db.Directors.ToList());
+            var model = new DirectorIndexViewModel()
+            {
+                Directors = db.Directors.ToList()
+            };
+            return View(model);
         }
 
         // GET: Directors/Details/5
