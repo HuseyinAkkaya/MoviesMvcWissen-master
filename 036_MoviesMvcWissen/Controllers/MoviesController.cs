@@ -81,18 +81,19 @@ namespace _036_MoviesMvcWissen.Controllers
                 //{
                 //    entity.MovieDirectors.Add(new MovieDirector() { MovieId = 0, DirectorId = director });
                 //}
-                
-                entity.MovieDirectors = Directors.Select(e => new MovieDirector()
-                {
-                    DirectorId = e,
-                    MovieId = entity.Id
-                }).ToList();
+                entity.MovieDirectors = new List<MovieDirector>();
+                if (Directors != null)
+                    entity.MovieDirectors = Directors.Select(e => new MovieDirector()
+                    {
+                        DirectorId = e,
+                        MovieId = entity.Id
+                    }).ToList();
 
 
                 db.Movies.Add(entity);
 
                 db.SaveChanges();
-                Debug.WriteLine("Added Entity Id: " +entity.Id);
+                Debug.WriteLine("Added Entity Id: " + entity.Id);
             }
             catch (Exception e)
             {
@@ -141,15 +142,15 @@ namespace _036_MoviesMvcWissen.Controllers
             var newMovie = db.Movies.Find(movie.Id);
             newMovie.Name = movie.Name;
             newMovie.ProductionYear = movie.ProductionYear;
-            newMovie.MovieDirectors= new List<MovieDirector>();
+            newMovie.MovieDirectors = new List<MovieDirector>();
             if (!string.IsNullOrWhiteSpace(BoxOfficeReturn))
                 newMovie.BoxOfficeReturn =
                     Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture);
 
             var movieDirectors = db.MovieDirectors.Where(e => e.MovieId == movie.Id).ToList();
-            movieDirectors.ForEach(e=> db.Entry(e).State = EntityState.Deleted);
-
-            directorIds.ForEach(e=> newMovie.MovieDirectors.Add(new MovieDirector(){MovieId = newMovie.Id,DirectorId = e})  );
+            movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
+           
+            directorIds?.ForEach(e => newMovie.MovieDirectors.Add(new MovieDirector() { MovieId = newMovie.Id, DirectorId = e }));
 
             db.Entry(newMovie).State = EntityState.Modified;
             db.SaveChanges();

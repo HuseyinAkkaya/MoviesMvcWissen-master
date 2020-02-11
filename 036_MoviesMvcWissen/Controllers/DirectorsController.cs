@@ -40,6 +40,11 @@ namespace _036_MoviesMvcWissen.Controllers
         // GET: Directors/Create
         public ActionResult Create()
         {
+
+            var movies = db.Movies.ToList();
+
+            ViewBag.MovieList = new MultiSelectList(movies, "Id", "Name");
+            
             return View();
         }
 
@@ -50,13 +55,15 @@ namespace _036_MoviesMvcWissen.Controllers
         [ValidateAntiForgeryToken]
         // public ActionResult Create([Bind(Include = "Id,Name,Surname,Retired")] Director director)
         [ActionName("Create")]
-        public ActionResult CreateNew()
-        {
+        public ActionResult CreateNew(List<int> ddlmovieList)
+        {   
             var director = new Director()
             {
+
                 Name = Request.Form["Name"],
                 Surname = Request.Form["Surname"],
-                Retired = Request.Form["Retired"] != "false"
+                Retired = Request.Form["Retired"] != "false",
+                MovieDirectors = new List<MovieDirector>()
             };
             
 
@@ -68,7 +75,9 @@ namespace _036_MoviesMvcWissen.Controllers
                 ModelState.AddModelError("Name", "Directory name must be max 100 characters");
              if (director.Surname.Length>100)
                 ModelState.AddModelError("Surname", "Directory surname must be max 100 characters");
-            
+
+
+             ddlmovieList.ForEach(e => director.MovieDirectors.Add(new MovieDirector() { MovieId = e,DirectorId = director.Id}));
 
             if (ModelState.IsValid)
             {
@@ -92,6 +101,11 @@ namespace _036_MoviesMvcWissen.Controllers
             {
                 return HttpNotFound();
             }
+
+            var movies = db.Movies.ToList();
+            var selectedIds = director.MovieDirectors.Select(e => e.MovieId).ToList();
+            ViewBag.Movies = new MultiSelectList(movies, "Id", "Name", selectedIds);
+            
             return View(director);
         }
 
@@ -100,11 +114,24 @@ namespace _036_MoviesMvcWissen.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Surname,Retired")] Director director)
+        public ActionResult Edit([Bind(Include = "Id,Name,Surname,Retired")] Director director,List<int> selectedIds)
         {
+            
             if (ModelState.IsValid)
             {
-                db.Entry(director).State = EntityState.Modified;
+                var newdirector = db.Directors.Find(director.Id);
+                newdirector.Name = director.Name;
+                newdirector.Surname = director.Surname;
+                newdirector.Retired = director.Retired;
+                newdirector.MovieDirectors = new List<MovieDirector>();
+
+                var movieDirectors = db.MovieDirectors.Where(e => e.DirectorId == director.Id).ToList();
+                movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
+            
+                selectedIds?.ForEach(e=> newdirector.MovieDirectors.Add(new MovieDirector(){DirectorId = director.Id,MovieId = e}));
+
+
+                db.Entry(newdirector).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
