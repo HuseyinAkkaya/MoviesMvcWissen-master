@@ -259,6 +259,7 @@
     <Compile Include="Controllers\DirectorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\ReviewsController.cs" />
     <Compile Include="Entities\Director.cs" />
     <Compile Include="Entities\Movie.cs" />
     <Compile Include="Entities\MovieDirector.cs" />
@@ -274,9 +275,11 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DirectorIndexViewModel.cs" />
     <Compile Include="Models\DirectorModel.cs" />
+    <Compile Include="Models\DirectorsEditViewModel.cs" />
     <Compile Include="Models\MoviesIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validations\FluentValidations\DirectorValidator.cs" />
+    <Compile Include="Validations\FluentValidations\ReviewValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -310,6 +313,14 @@
     <Content Include="Views\Directors\Details.cshtml" />
     <Content Include="Views\Directors\Edit.cshtml" />
     <Content Include="Views\Directors\Index.cshtml" />
+    <Content Include="Views\Reviews\Create.cshtml" />
+    <Content Include="Views\Reviews\Delete.cshtml" />
+    <Content Include="Views\Reviews\Details.cshtml" />
+    <Content Include="Views\Reviews\Edit.cshtml" />
+    <Content Include="Views\Reviews\Index.cshtml" />
+    <Content Include="Views\Movies\List.cshtml" />
+    <Content Include="Views\Directors\EditNew.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Movie.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -38,16 +38,16 @@
         <dt>
 
             <text><b>Movies</b></text><br />
-        </dt>
-
+        </dt >
+        <div class="pre-scrollable table-bordered" style="max-height: 150px; min-height: 50px">
             @foreach (var a in @movies)
             {
                 <dd>
                     @Html.DisplayFor(modelItem => a)
-               </dd>
-               
-            }
+                </dd>
 
+            }
+        </div>
 
     </dl>
 </div>

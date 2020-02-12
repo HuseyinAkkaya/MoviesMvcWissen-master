@@ -57,6 +57,21 @@ namespace _036_MoviesMvcWissen.Controllers
             return View(moviesIndexViewModel);
         }
 
+        public ViewResult List(MoviesIndexViewModel moviesIndexViewModel)
+        {
+            if(moviesIndexViewModel == null)
+                moviesIndexViewModel= new MoviesIndexViewModel();
+
+            var moviesQuery = db.Movies.AsQueryable();
+
+
+
+            moviesIndexViewModel.Movies = moviesQuery.ToList();
+
+            return View(moviesIndexViewModel);
+
+        }
+
 
         public ActionResult GetMoviesFromSession()
         {
@@ -174,7 +189,7 @@ namespace _036_MoviesMvcWissen.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "Id,Name,ProductionYear")]Movie movie, string BoxOfficeReturn, List<int> directorIds)
         {
-
+            if (ModelState.IsValid) { 
             var newMovie = db.Movies.Find(movie.Id);
             newMovie.Name = movie.Name;
             newMovie.ProductionYear = movie.ProductionYear;
@@ -192,6 +207,10 @@ namespace _036_MoviesMvcWissen.Controllers
             db.SaveChanges();
             TempData["Info"] = "Record successfully updated in database";
             return RedirectToAction("Index");
+
+            }
+
+            return View(movie);
         }
 
         [HttpGet]

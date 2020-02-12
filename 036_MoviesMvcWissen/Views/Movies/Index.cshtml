@@ -3,7 +3,7 @@
 @model _036_MoviesMvcWissen.Models.MoviesIndexViewModel
 @{
     ViewBag.Title = "Movies";
-
+    var movies = Model.Movies;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -12,7 +12,7 @@
 
 @{ Html.RenderAction("Welcome");}
 <br />
-@using (Html.BeginForm("Index","Movies",FormMethod.Get))
+@using (Html.BeginForm("Index", "Movies", FormMethod.Get))
 {
     <table class="table">
         <tr>
@@ -21,7 +21,7 @@
         </tr>
         <tr class=" ">
             <td colspan="2">
-                @Html.Button(" Search",new {@class= "btn btn-primary fa fa-search", type="submit"})
+                @Html.Button(" Search", new { @class = "btn btn-primary fa fa-search", type = "submit" })
             </td>
         </tr>
 
@@ -44,6 +44,7 @@
     </tr>
 
 
+
     @foreach (var f in Model.Movies)
     {
         <tr>
@@ -51,6 +52,7 @@
             <td>@f.Name</td>
             <td>@f.ProductionYear</td>
             <td>@f.BoxOfficeReturn</td>
+
 
         </tr>
     }
@@ -60,3 +62,32 @@
     </tr>
 
 </table>
+
+
+<div class="row">
+
+
+
+    @for (int i = 0; i < @movies.Count; i++)
+    {
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                <div class="card-header btn">
+
+                    @Html.ActionLink(movies[i].Name, "Details", new { id = movies[i].Id }, new { @class = "btn" })
+
+                    
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@movies[i].ProductionYear</h5>
+                    <p class="card-text">@movies[i].BoxOfficeReturn</p>
+                </div>
+            </div>
+        </div>
+        if ((i + 1) % 3 == 0)
+        {
+
+        @:</div><div class="row">
+        }
+    }
+</div>

@@ -3,7 +3,7 @@
     var directorsFullNames = ViewBag.DirectorNames as string;
 }
 
-<div class="row" >
+@*<div class="row" >
     <div class="col-md-2"><b>@Html.DisplayNameFor(e => e.Name):</b></div>
     <div class="col-md-10">@Html.DisplayFor(e => e.Name)</div>
 
@@ -15,7 +15,17 @@
 <div class="row">
     <div class="col-md-2"><b>@Html.DisplayNameFor(e => e.ProductionYear):</b></div>
     <div class="col-md-10">@Html.DisplayFor(e => e.ProductionYear)</div>
-</div>
+</div>*@
+
+
+
+@Html.DisplayForModel("Movie")
+
+@*@{
+    Html.RenderPartial("DisplayTemplates/Movie", Model);
+    Html.RenderAction("Edit", Model.Id);
+}*@
+
 <div class="row">
     <div class="col-md-2"><b>@Html.DisplayName("Directors"):</b></div>
     <div class="col-md-10">@directorsFullNames</div>
