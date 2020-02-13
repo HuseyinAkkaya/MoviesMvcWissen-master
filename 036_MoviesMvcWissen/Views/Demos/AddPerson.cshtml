@@ -1,0 +1,9 @@
+﻿@model _036_MoviesMvcWissen.Models.Demos.Templates.PersonModel
+@{
+    ViewBag.Title = "AddPerson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.EditorForModel()
+<div>
+    @Html.ActionLink("Back to List", "GetPeople")
+</div>
