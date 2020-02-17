@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>People | jQuery Ajax</title>
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.getJSON("./Demos/GetPeopleJson",
+                function (response) {
+                    $.each(response,
+                        function (i, data) {
+                            $("#ul_people").append("<li>Id:" +
+                                data.Id +
+                                " - Name: " +
+                                data.FullName +
+                                " -  Identity No:" +
+                                data.IdentityNo +
+                                " -  GraduatedFromUniversity:" +
+                                (data.GraduatedFromUniversity == true ? "Yes" : "No") +
+                                " - BirthDate: " +
+                                new Date(parseInt(data.BirthDate.substr(6))).toLocaleDateString() +
+                                " </li>");
+                        });
+                });
+            //var a = 1;
+            //var x = setInterval(function () {
+
+            //    console.log(a);
+            //    a += 1;
+            //}, 1000);
+
+            $("#bRefresh").click(function () {
+                clearPeopleList();
+                $.ajax({
+                    url: "./Demos/GetPeopleJson",
+                    type: "get",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    cache: false,
+                    success: function (response, response_textstatus, response_jqxhr) {
+                        console.log("status:" + response_textstatus + "\njqxhr status:" + response_jqxhr.status);
+                        var html = '<ul id="ul_people">';
+                        for (var i = 0; i < response.length; i++) {
+                            html += "<li>Id:" +
+                                response[i].Id +
+                                " - Name: " +
+                                response[i].FullName +
+                                " -  Identity No:" +
+                                response[i].IdentityNo +
+                                " -  GraduatedFromUniversity:" +
+                                (response[i].GraduatedFromUniversity == true ? "Yes" : "No") +
+                                " - BirthDate: " +
+                                new Date(parseInt(response[i].BirthDate.substr(6))).toLocaleDateString() +
+                                " </li>";
+                        }
+                        html += "</ul>";
+                        $("#div_people").html(html);
+                    },
+                    error: function (response_textstatus, response_jqxhr) {
+                        alert("An error occured");
+                        console.log("status: " + response_textstatus + " - jqxhr:" + response_jqxhr.status);
+                    }
+                });
+            });
+
+
+        });
+
+
+
+        function clearPeopleList() {
+            $("#div_people").empty();
+            console.log("clear");
+        }
+
+    </script>
+</head>
+<body>
+    <h2>People</h2>
+    <div id="div_people">
+        <ul id="ul_people"></ul>
+    </div>
+    <button id="bRefresh">Refresh</button>
+    <button onclick="clearPeopleList()" id="bClear">Clear</button>
+
+
+</body>
+
+</html>

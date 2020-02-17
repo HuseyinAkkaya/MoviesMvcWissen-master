@@ -11,11 +11,13 @@ using _036_MoviesMvcWissen.Entities;
 
 namespace _036_MoviesMvcWissen.Controllers
 {
+  [Authorize]
     public class ReviewsController : Controller
     {
         private MoviesContext db = new MoviesContext();
 
         // GET: Reviews
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var reviews = db.Reviews.Include(r => r.Movie);
@@ -23,6 +25,7 @@ namespace _036_MoviesMvcWissen.Controllers
         }
 
         // GET: Reviews/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)

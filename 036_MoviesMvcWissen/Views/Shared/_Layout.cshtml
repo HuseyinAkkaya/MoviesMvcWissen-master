@@ -9,16 +9,20 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Movies MVS | @ViewBag.Title</title>
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap.min.js"></script>
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
-    <link href="~/Plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="~/Plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.tr.js"></script>
+
+
+
 
 </head>
 <body>
@@ -49,6 +53,9 @@
                         <li class="nav-item">
                             <a class="nav-link " href="@Url.Action("Index","Directors")">Directors</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="@Url.Action("Index","Reviews")">Directors</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Demos
@@ -61,14 +68,43 @@
                                 <a class="dropdown-item" href="~/Demos/FromRoute/8">Get Value from route.</a>
                                 <a class="dropdown-item" href="~/Demos/FromQueryString?name=Hüseyin&surname=Akkaya">Get Value from queryString.</a>
                                 <a class="dropdown-item" href="~/Demos/GetPeople">Get People</a>
-                                </div>
+                                <a class="dropdown-item" href="~/Demos/GetPeopleAjax">Get People AJAX</a>
+                                <a class="dropdown-item" href="~/Demos/GetPeopleHtml">Get People Html</a>
+                            </div>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+                            <li class="nav-item dropdown ">
+                                <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fa fa-user"> @User.Identity.Name</span>
+
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="~/Demos/Razor1">-</a>
+                                    <a class="dropdown-item" href="~/Demos/Razor2">-</a>
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="~/Demos/FromRoute/8">-</a>
+                                    <a class="dropdown-item" href="~/Demos/FromQueryString?name=Hüseyin&surname=Akkaya">-</a>
+                                    <a class="dropdown-item" href="~/Login/Logout">Logout</a>
+                                </div>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <ul class="navbar-nav mr-auto justify-content-between">
+                                <li class="nav-item">
+                                    <a class="nav-link " href="@Url.Action("Index","Login")"><span class="fa fa-sign-in font-weight-bold"> Login</span></a>
+                                </li>
+                            </ul>
+                        }
 
                     </ul>
-                    <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+
+
+
                 </div>
             </div>
         </nav>
@@ -80,6 +116,10 @@
         </div>
         <div class="footer"></div>
     </div>
+
+   
+
+
 
 </body>
 </html>

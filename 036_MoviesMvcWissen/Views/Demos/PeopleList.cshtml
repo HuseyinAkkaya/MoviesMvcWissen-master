@@ -1,0 +1,62 @@
+﻿@using _036_MoviesMvcWissen.Controllers
+@model IEnumerable<_036_MoviesMvcWissen.Models.Demos.Templates.PersonModel>
+@{
+    var ajaxOptions = new AjaxOptions()
+    {
+        AllowCache = false,
+        UpdateTargetId = "div_users",
+        InsertionMode = InsertionMode.Replace,
+        Confirm = "Are you sure?",
+        OnSuccess = "successful"
+
+    };
+    
+}
+<table class="table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GraduatedFromUniversity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IdentityNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr><td>
+                @Ajax.ActionLink("Delete","RemovePeopleAjax","Demos",new {id=item.Id},ajaxOptions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GraduatedFromUniversity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentityNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+
+        </tr>
+    }
+
+</table>
+<label id="lMessage" style="color: red"></label>
+<script>
+    function successful(parameters) {
+        console.log("Operation successful");
+        $('#lMessage').text("Operation successful");
+    }
+</script>
