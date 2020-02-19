@@ -7,6 +7,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using _036_MoviesMvcWissen.Models;
 using _036_MoviesMvcWissen.Models.Demos.Templates;
 
 namespace _036_MoviesMvcWissen.Controllers
@@ -233,6 +234,18 @@ namespace _036_MoviesMvcWissen.Controllers
         public RedirectResult GetPeopleHtml()
         {
             return RedirectPermanent("~/DemosPeople.html");
+        }
+        //[Route("demos/AddNumber/{id?}{no2?}")] arızalı
+        //public ActionResult AddNumber(int? id,int? no2)
+        //{
+        //    return Content((id + no2).ToString());
+        //}
+
+            [Route("demos/nlf/{a?}/{b?}")]
+        public ActionResult nl(int?a,int?b)
+        {
+            int? ad = a + b;
+            return new EmptyResult();
         }
     }
 }

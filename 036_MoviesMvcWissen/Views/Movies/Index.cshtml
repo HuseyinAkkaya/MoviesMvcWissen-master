@@ -11,6 +11,10 @@
 @*@Html.Action("Welcome")*@
 
 @{ Html.RenderAction("Welcome");}
+
+@Html.ActionLink("Movies Reports","Movies","Reports")
+<br/>
+
 <br />
 @using (Html.BeginForm("Index", "Movies", FormMethod.Get))
 {
