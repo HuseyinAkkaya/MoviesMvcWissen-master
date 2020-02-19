@@ -36,7 +36,7 @@
 
 
                 @*<a class="navbar-brand " href="~/Home/Index">Movies MVC</a>*@
-                <a class="navbar-brand" href="@Url.Action("Index","Home")">Movies MVC</a>
+                <a class="navbar-brand" href="@Url.Action("Index","Home")">Movies MVC Admin</a>
 
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,33 +50,16 @@
 
                             @*<a class="nav-link " href="/Movies/Index">Movies <span class="sr-only">(current)</span></a>*@
 
-                            <a class="nav-link " href="@Url.RouteUrl("Default",new {controller="Movies",action="Index"})">Movies</a>
-
+                            @* <a class="nav-link " href="@Url.RouteUrl("Default",new {controller="Movies",action="Index"})">Movies</a>*@
+                            @Html.ActionLink("Users", "Index", "Home", new { area = "Admin" }, new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="@Url.Action("Index","Directors")">Directors</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="@Url.Action("Index","Reviews")">Directors</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Demos
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="~/Demos/Razor1">Razor1</a>
-                                <a class="dropdown-item" href="~/Demos/Razor2">Razor2</a>
-                                <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Movies MVC", "Index", "Home", new { area = "" }, new { @class = "nav-link" })
 
-                                <a class="dropdown-item" href="~/Demos/FromRoute/8">Get Value from route.</a>
-                                <a class="dropdown-item" href="~/Demos/FromQueryString?name=Hüseyin&surname=Akkaya">Get Value from queryString.</a>
-                                <a class="dropdown-item" href="~/Demos/GetPeople">Get People</a>
-                                <a class="dropdown-item" href="~/Demos/GetPeopleAjax">Get People AJAX</a>
-                                <a class="dropdown-item" href="~/Demos/GetPeopleHtml">Get People Html</a>
-                            </div>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
 
                             <li class="nav-item dropdown ">
                                 <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -84,6 +67,7 @@
 
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="@Url.Action("Index","Home",new {area="Admin"})">Admin page(Url.Action)</a>
                                     <a class="dropdown-item" href="~/Admin/Home">Admin page</a>
                                     <a class="dropdown-item" href="~/Login/Logout">Logout</a>
@@ -100,7 +84,7 @@
                             </ul>
                         }
 
-                    </ul>
+                        </ul>
 
 
 

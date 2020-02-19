@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
 using _036_MoviesMvcWissen.Contexts;
@@ -26,8 +27,9 @@ namespace _036_MoviesMvcWissen.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (db.Users.Any(e => e.UserName == user.UserName && e.Password == user.Password))
+                if (db.Users.Any(e => e.UserName == user.UserName && e.Password == user.Password && e.Active))
                 {
+                     
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
 
 
