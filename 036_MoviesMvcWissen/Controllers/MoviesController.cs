@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -19,6 +21,7 @@ namespace _036_MoviesMvcWissen.Controllers
         // GET: Movies
         public ViewResult Index(MoviesIndexViewModel moviesIndexViewModel)
         {
+
 
             if (moviesIndexViewModel == null || string.IsNullOrWhiteSpace(moviesIndexViewModel.YearId))
             {
@@ -47,7 +50,7 @@ namespace _036_MoviesMvcWissen.Controllers
                 Text = m.Key,
                 Value = m.Key
             }).ToList();
-            years.Insert(0,new SelectListItem(){Text = @"--All--",Value = ""});
+            years.Insert(0, new SelectListItem() { Text = @"--All--", Value = "" });
 
             moviesIndexViewModel.Years = new SelectList(years, "Value", "Text", moviesIndexViewModel.YearId);
 
@@ -59,8 +62,8 @@ namespace _036_MoviesMvcWissen.Controllers
 
         public ViewResult List(MoviesIndexViewModel moviesIndexViewModel)
         {
-            if(moviesIndexViewModel == null)
-                moviesIndexViewModel= new MoviesIndexViewModel();
+            if (moviesIndexViewModel == null)
+                moviesIndexViewModel = new MoviesIndexViewModel();
 
             var moviesQuery = db.Movies.AsQueryable();
 
@@ -116,16 +119,36 @@ namespace _036_MoviesMvcWissen.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(string Name, int ProductionYear, string BoxOfficeReturn, List<int> Directors)
+        public ActionResult Add(string Name, int ProductionYear, string BoxOfficeReturn, List<int> Directors, HttpPostedFileBase Image)
         {
             try
             {
+
+                string filePath = null;
+                if (Image != null && Image.ContentLength > 0)
+                {
+
+                    //var fileName = Path.GetFileName(Image.FileName);//Cagil.jpg
+                    var fileNeme = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + Name + Path.GetExtension(Image.FileName);
+
+                    if (Path.GetExtension(fileNeme).ToLower().Equals(".jpg") ||
+                        Path.GetExtension(fileNeme).ToLower().Equals(".jpeg") ||
+                        Path.GetExtension(fileNeme).ToLower().Equals(".png") ||
+                        Path.GetExtension(fileNeme).ToLower().Equals(".bmp"))
+                    {
+                        filePath = ConfigurationManager.AppSettings["FilesFolder"] + "/Movies/" + fileNeme;
+
+                    }
+                }
+
+
                 var entity = new Movie()
                 {
                     Id = 0,
                     Name = Name,
                     ProductionYear = ProductionYear.ToString(),
                     BoxOfficeReturn = Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture),
+                    FilePath = filePath
                     //MovieDirectors = new List<MovieDirector>()
                 };
                 //foreach (var director in Directors)
@@ -139,11 +162,13 @@ namespace _036_MoviesMvcWissen.Controllers
                         DirectorId = e,
                         MovieId = entity.Id
                     }).ToList();
-
-
                 db.Movies.Add(entity);
-
                 db.SaveChanges();
+                if (filePath != null)
+                {
+                    Image.SaveAs(Server.MapPath(filePath));
+                }
+
                 Debug.WriteLine("Added Entity Id: " + entity.Id);
             }
             catch (Exception e)
@@ -189,24 +214,25 @@ namespace _036_MoviesMvcWissen.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "Id,Name,ProductionYear")]Movie movie, string BoxOfficeReturn, List<int> directorIds)
         {
-            if (ModelState.IsValid) { 
-            var newMovie = db.Movies.Find(movie.Id);
-            newMovie.Name = movie.Name;
-            newMovie.ProductionYear = movie.ProductionYear;
-            newMovie.MovieDirectors = new List<MovieDirector>();
-            if (!string.IsNullOrWhiteSpace(BoxOfficeReturn))
-                newMovie.BoxOfficeReturn =
-                    Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture);
+            if (ModelState.IsValid)
+            {
+                var newMovie = db.Movies.Find(movie.Id);
+                newMovie.Name = movie.Name;
+                newMovie.ProductionYear = movie.ProductionYear;
+                newMovie.MovieDirectors = new List<MovieDirector>();
+                if (!string.IsNullOrWhiteSpace(BoxOfficeReturn))
+                    newMovie.BoxOfficeReturn =
+                        Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture);
 
-            var movieDirectors = db.MovieDirectors.Where(e => e.MovieId == movie.Id).ToList();
-            movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
+                var movieDirectors = db.MovieDirectors.Where(e => e.MovieId == movie.Id).ToList();
+                movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
 
-            directorIds?.ForEach(e => newMovie.MovieDirectors.Add(new MovieDirector() { MovieId = newMovie.Id, DirectorId = e }));
+                directorIds?.ForEach(e => newMovie.MovieDirectors.Add(new MovieDirector() { MovieId = newMovie.Id, DirectorId = e }));
 
-            db.Entry(newMovie).State = EntityState.Modified;
-            db.SaveChanges();
-            TempData["Info"] = "Record successfully updated in database";
-            return RedirectToAction("Index");
+                db.Entry(newMovie).State = EntityState.Modified;
+                db.SaveChanges();
+                TempData["Info"] = "Record successfully updated in database";
+                return RedirectToAction("Index");
 
             }
 

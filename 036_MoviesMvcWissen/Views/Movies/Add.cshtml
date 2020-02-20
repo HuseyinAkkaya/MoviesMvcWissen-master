@@ -6,18 +6,18 @@
 
 <h2>@ViewBag.Title</h2>
 <p style="color:#f06524 "> @ViewBag.Message</p>
-<form action="~/Movies/Add" method="post">
+<form action="~/Movies/Add" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="tbName">Product Name</label>
-        <input type="text" class="form-control" id="tbName" name="Name"/>
+        <input type="text" class="form-control" id="tbName" name="Name" />
     </div>
     <div class="form-group">
         <label for="ddlProductionYead">Production Year</label>
         <select id="ddlProductionYear" name="ProductionYear" class="form-control dropdown">
-          
+
             @for (int i = DateTime.Now.Year; i >= 1980; i--)
             {
-            <option class="dropdown-item" value="@i">@i</option>
+                <option class="dropdown-item" value="@i">@i</option>
             }
         </select>
 
@@ -28,9 +28,9 @@
     </div>
     <div class="form-group">
         <label for="ddlDirectors">Directors</label>
-        
-        <select id="ddlDirectors" name="Directors" class="form-control list-group" multiple >
-          
+
+        <select id="ddlDirectors" name="Directors" class="form-control list-group" multiple>
+
             @foreach (var director in directors)
             {
                 <option class="list-group-item" value="@director.Value">@director.Text</option>
@@ -39,6 +39,11 @@
         </select>
 
     </div>
+    <div class="form-group">
+        <label for="fuImage">Image:</label>
+        <input type="file" name="Image" accept="image/*"/>
+    </div>
+
     <button type="submit" class="btn btn-primary">Save</button>
     &nbsp;
     <button type="reset" class="btn btn-group">Clear</button>

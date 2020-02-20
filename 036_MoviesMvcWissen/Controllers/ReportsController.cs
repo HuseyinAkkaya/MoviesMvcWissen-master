@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Net.Mime;
 using System.Web;
 using System.Web.Mvc;
 using _036_MoviesMvcWissen.Contexts;
@@ -17,7 +18,19 @@ namespace _036_MoviesMvcWissen.Controllers
         // GET: Reports
         public ActionResult Movies(ReportMoviesViewModel reportModel)
         {
+            GetModel(reportModel);
+            return View(reportModel);
+        }
 
+        public ActionResult GetMovies(ReportMoviesViewModel reportModel)
+        {
+            GetModel(reportModel);
+            return PartialView("_Movies",reportModel);
+        }
+
+        [NonAction]
+        public void GetModel(ReportMoviesViewModel reportModel)
+        {
             var movieQuery = db.Movies.AsQueryable();
             var directorQuery = db.Directors.AsQueryable();
             var movieDirectorQuery = db.MovieDirectors.AsQueryable();
@@ -52,12 +65,11 @@ namespace _036_MoviesMvcWissen.Controllers
                         };
 
             var recordCount = query.Count();
+            reportModel.RecordsPerPageCount = Convert.ToInt32(ConfigurationManager.AppSettings["MovieReportRecordsPerPage"]);
 
-            reportModel.RecordsPerPageCount= Convert.ToInt32(ConfigurationManager.AppSettings["MovieReportRecordsPerPage"]);
-
-            query = query.OrderBy(e=>e.MovieId).Skip((reportModel.PageNumber - 1) * reportModel.RecordCount)
+            query = query.OrderBy(e => e.MovieId).Skip((reportModel.PageNumber - 1) * reportModel.RecordsPerPageCount)
                 .Take(reportModel.RecordsPerPageCount);
-            
+
 
             var list = query.ToList().Select(e => new ReportMoviesModel()
             {
@@ -73,11 +85,27 @@ namespace _036_MoviesMvcWissen.Controllers
                 ReviewReviewer = e.ReviewReviewer
             }).ToList();
 
-            
+
             reportModel.ReportMoviesModels = list;
             reportModel.RecordCount = recordCount;
-
-            return View(reportModel);
+            int numberofPages =
+              Convert.ToInt32(Math.Ceiling((decimal)reportModel.RecordCount / (decimal)reportModel.RecordsPerPageCount));
+            List<SelectListItem> pageList = new List<SelectListItem>();
+            SelectListItem pageItem;
+            for (int i = 1; i <= numberofPages; i++)
+            {
+                pageItem = new SelectListItem()
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                };
+                pageList.Add(pageItem);
+            }
+            reportModel.PageNumbers = new SelectList(pageList, "Value", "Text", reportModel.PageNumber);
+            
         }
+
+
+
     }
 }

@@ -6,79 +6,45 @@
 }
 
 <h2>Movies</h2>
-@Model.PageNumber
-@Model.RecordCount
-@Model.RecordsPerPageCount
-<div class="pre-scrollable">
-    <table class="table">
-        <tr>
-            <th>
-                @* @Html.DisplayNameFor(model =>  model.ReportMoviesModels.FirstOrDefault().MovieId)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().MovieName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().MovieProductionYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().MovieBoxOfficeReturn)
-            </th>
+<div id="divMovies">
+    @Html.Partial("_Movies",Model)
 
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().DirectorFullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().DirectorRetired)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().ReviewContent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().ReviewRating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReportMoviesModels.FirstOrDefault().ReviewReviewer)
-            </th>
-
-        </tr>
-
-        @foreach (var item in Model.ReportMoviesModels)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(" ", "Details", "Movies", new { id = item.MovieId }, new { @class = "fa fa-info btn btn-warning" })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MovieName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MovieProductionYear)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MovieBoxOfficeReturn)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.DirectorFullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DirectorRetired)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReviewContent)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReviewRating)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReviewReviewer)
-                </td>
-
-            </tr>
-        }
-
-    </table>
 </div>
+
+@{
+    var ajaxOptions = new AjaxOptions()
+    {
+        AllowCache = false,
+        Url = Url.Action("GetMovies", "Reports"),
+        HttpMethod = "GET",
+        UpdateTargetId = "divMovies",
+        InsertionMode = InsertionMode.Replace
+    };
+}
+
+@using (Ajax.BeginForm(null, null, ajaxOptions, new { id = "fMovies" }))
+{
+    <div class="row">
+        <div class="col-sm-10">
+        </div>
+        <div class="col-sm-2">
+            @Html.DropDownList("PageNumber", @Model.PageNumbers, new { @class = "form-control-lg dropdown", id = "ddlPageMovie" })
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("#ddlPageMovie").change(function () {
+            $("#fMovies").submit();
+        });
+    })
+</script>
+
+
+
+
+@section ajaxSecript{
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

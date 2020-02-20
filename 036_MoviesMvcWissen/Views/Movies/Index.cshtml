@@ -12,8 +12,8 @@
 
 @{ Html.RenderAction("Welcome");}
 
-@Html.ActionLink("Movies Reports","Movies","Reports")
-<br/>
+@Html.ActionLink("Movies Reports", "Movies", "Reports")
+<br />
 
 <br />
 @using (Html.BeginForm("Index", "Movies", FormMethod.Get))
@@ -42,6 +42,7 @@
 
     <tr>
         <td><b> </b></td>
+        <td></td>
         <td><b>Name</b></td>
         <td><b>Production Year</b></td>
         <td><b>Box Office Return</b></td>
@@ -53,6 +54,22 @@
     {
         <tr>
             <td>@Html.ActionLink(" ", "Edit", new { id = f.Id }, new { @class = "fa fa-edit btn btn-danger" }) | @Html.ActionLink(" ", "Delete", new { id = f.Id }, new { @class = "fa fa-trash-o btn btn-danger" }) | @Html.ActionLink(" ", "Details", new { id = f.Id }, new { @class = "fa fa-info btn btn-warning" })</td>
+            <td>
+                @{
+
+                    if (f.FilePath != null)
+                    {
+                        <img src="@Url.Content(f.FilePath)" onerror=" $(this).hide(); console.log('@f.Name image not found');" width="200" height="200" />
+                    }
+
+                }
+                        @*<script>
+                            $('img').on("error", function () {
+                                console.log("Image not found @f.Name");
+                                $(this).hide();
+                            });
+                        </script>*@
+            </td>
             <td>@f.Name</td>
             <td>@f.ProductionYear</td>
             <td>@f.BoxOfficeReturn</td>
@@ -80,7 +97,7 @@
 
                     @Html.ActionLink(movies[i].Name, "Details", new { id = movies[i].Id }, new { @class = "btn" })
 
-                    
+
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">@movies[i].ProductionYear</h5>
