@@ -124,23 +124,7 @@ namespace _036_MoviesMvcWissen.Controllers
             try
             {
 
-                string filePath = null;
-                if (Image != null && Image.ContentLength > 0)
-                {
-
-                    //var fileName = Path.GetFileName(Image.FileName);//Cagil.jpg
-                    var fileNeme = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + Name + Path.GetExtension(Image.FileName);
-
-                    if (Path.GetExtension(fileNeme).ToLower().Equals(".jpg") ||
-                        Path.GetExtension(fileNeme).ToLower().Equals(".jpeg") ||
-                        Path.GetExtension(fileNeme).ToLower().Equals(".png") ||
-                        Path.GetExtension(fileNeme).ToLower().Equals(".bmp"))
-                    {
-                        filePath = ConfigurationManager.AppSettings["FilesFolder"] + "/Movies/" + fileNeme;
-
-                    }
-                }
-
+                string filePath = ImageFilePath(Name, Image);
 
                 var entity = new Movie()
                 {
@@ -164,8 +148,10 @@ namespace _036_MoviesMvcWissen.Controllers
                     }).ToList();
                 db.Movies.Add(entity);
                 db.SaveChanges();
+
                 if (filePath != null)
                 {
+
                     Image.SaveAs(Server.MapPath(filePath));
                 }
 
@@ -181,6 +167,31 @@ namespace _036_MoviesMvcWissen.Controllers
             TempData["Info"] = "Record successfully saved to database";
             return RedirectToAction("Index");
         }
+
+
+        private string ImageFilePath(string Name, HttpPostedFileBase Image)
+        {
+            string filePath = null;
+            if (Image != null && Image.ContentLength > 0)
+            {
+
+                //var fileName = Path.GetFileName(Image.FileName);//Cagil.jpg
+                var fileNeme = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + Name + Path.GetExtension(Image.FileName);
+
+                if (Path.GetExtension(fileNeme).ToLower().Equals(".jpg") ||
+                    Path.GetExtension(fileNeme).ToLower().Equals(".jpeg") ||
+                    Path.GetExtension(fileNeme).ToLower().Equals(".png") ||
+                    Path.GetExtension(fileNeme).ToLower().Equals(".bmp"))
+                {
+                    filePath = ConfigurationManager.AppSettings["FilesFolder"] + "/Movies/" + fileNeme;
+
+                }
+            }
+
+            return filePath;
+        }
+
+
 
         [HttpGet]
         public ActionResult Edit(int? id)
@@ -212,10 +223,12 @@ namespace _036_MoviesMvcWissen.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "Id,Name,ProductionYear")]Movie movie, string BoxOfficeReturn, List<int> directorIds)
+        public ActionResult Edit([Bind(Include = "Id,Name,ProductionYear")]Movie movie, string BoxOfficeReturn, List<int> directorIds, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
+
+
                 var newMovie = db.Movies.Find(movie.Id);
                 newMovie.Name = movie.Name;
                 newMovie.ProductionYear = movie.ProductionYear;
@@ -224,13 +237,37 @@ namespace _036_MoviesMvcWissen.Controllers
                     newMovie.BoxOfficeReturn =
                         Convert.ToDouble(BoxOfficeReturn.Replace(',', '.'), CultureInfo.InvariantCulture);
 
+
+
+                string oldFilePath = newMovie.FilePath;
+                if (ImageFilePath(movie.Name, Image) != null)
+                    newMovie.FilePath = ImageFilePath(movie.Name, Image);
+
+
+
                 var movieDirectors = db.MovieDirectors.Where(e => e.MovieId == movie.Id).ToList();
                 movieDirectors.ForEach(e => db.Entry(e).State = EntityState.Deleted);
 
                 directorIds?.ForEach(e => newMovie.MovieDirectors.Add(new MovieDirector() { MovieId = newMovie.Id, DirectorId = e }));
 
+
+
+
                 db.Entry(newMovie).State = EntityState.Modified;
                 db.SaveChanges();
+
+                if (ImageFilePath(movie.Name, Image) != null)
+                {
+                    if (oldFilePath != null && System.IO.File.Exists(Server.MapPath(oldFilePath)))
+                    {
+                        System.IO.File.Delete(Server.MapPath(oldFilePath));
+                    }
+
+                    Image.SaveAs(Server.MapPath(newMovie.FilePath));
+                }
+
+
+
                 TempData["Info"] = "Record successfully updated in database";
                 return RedirectToAction("Index");
 
@@ -260,6 +297,13 @@ namespace _036_MoviesMvcWissen.Controllers
             db.Movies.Remove(entity);
             TempData["Info"] = "Record successfully deleted from database";
             db.SaveChanges();
+
+            if (entity.FilePath != null && System.IO.File.Exists(Server.MapPath(entity.FilePath)))
+            {
+                System.IO.File.Delete(Server.MapPath(entity.FilePath));
+            }
+
+
             return RedirectToAction("Index");
         }
 

@@ -20,7 +20,7 @@
         Html.EndForm();
     }*@
 
-@using (Html.BeginForm("Edit", "Movies", FormMethod.Post))
+@using (Html.BeginForm("Edit", "Movies", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.Hidden("Id", Model.Id)
     <div class="form-group">
@@ -45,7 +45,17 @@
         @Html.ListBox("directorIds", directors, new { @class = "form-control ", id = "ddlDirectors" })
 
     </div>
-    @Html.Button(" Save", new { @class = "btn btn-success" , type = "submit" });
+    <div>
+        @if (Model.FilePath != null)
+        {
+            <img src="@Url.Content(Model.FilePath)" onerror=" $(this).hide(); console.log('@Model.Name image not found');" width="200" height="200" />
+        }
+    </div>
+    <div class="form-group">
+        <label for="fuImage">Image:</label>
+        <input type="file" name="Image" accept="image/*"/>
+    </div>
+    @Html.Button(" Save", new { @class = "btn btn-success", type = "submit" });
     @:&nbsp;
     @Html.Button("Clear", new { @class = "btn btn-secondary", type = "reset" });
 

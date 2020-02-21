@@ -27,6 +27,15 @@
         <dd>
             @Html.DisplayFor(model => model.BoxOfficeReturn)
         </dd>
+        <dt>
+            @Html.Label("LImage","Image")
+        </dt>
+        <dd>
+            @if (Model.FilePath != null)
+            {
+            <img src="@Url.Content(Model.FilePath+"2")" width="200" height="200" onerror="$(this).hide(); console.log('@Model.Name image not found');"  />
+            }
+        </dd>
 
     </dl>
 </div>
